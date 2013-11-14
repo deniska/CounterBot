@@ -14,7 +14,7 @@ It will also create users.json for tracking dates
 Bot commands
 ==========
 * hello # test command
-* set &lt;yyyy-mm-dd&rt; [user] # set counter date
+* set &lt;yyyy-mm-dd> [user] # set counter date
 * reset # set counter date to today
 * get [user] # get day count
 * help # list of commands
