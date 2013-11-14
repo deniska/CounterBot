@@ -136,7 +136,23 @@ var funcs = map[string]func(string, string) string{
 		return "Counter not found for user " + user
 	},
 	"help": func(nick, data string) string {
-		return "Commands: help, set, get, reset, hello"
+		return "Commands: help, set, get, reset, delete, hello"
+	},
+	"delete": func(nick, data string) string {
+		user := data
+		if user == "" {
+			user = nick
+		}
+		if user == nick || isAdmin(nick) {
+    		if _, ok := users[user]; ok {
+	    	    delete(users, user)
+	    	    save()
+	    	    return "Counter for user " + user + " deleted"
+	    	} else {
+	    	    return "Counter not found for user " + user
+	    	}
+    	}
+    	return "You can't delete other people's counters"
 	},
 }
 
