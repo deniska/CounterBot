@@ -1,0 +1,7 @@
+{
+    "User": "ExampleNick",
+    "Nick": "ExampleUser",
+    "Server": "irc.example.com:6667",
+    "Channels": ["#examplechannel"],
+    "Admins": ["ExampleAdmin"]
+}
