@@ -1,3 +1,7 @@
+// Copyright 2013 Denis Pobedrya <denis.pobedrya@gmail.com> All rights reserved.
+// Use of this source code is governed by a MIT-style
+// license that can be found in the LICENSE file.
+
 package main
 
 import (
@@ -9,6 +13,7 @@ import (
 	"time"
 	"strconv"
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -147,7 +152,7 @@ func onMessage(bot *irc.Connection, from, to, message string) {
 	}
 	m := re.FindStringSubmatch(message)
 	if m != nil {
-		cmd, data := m[1], m[2]
+		cmd, data := strings.ToLower(m[1]), m[2]
 		fmt.Println("Cmd:", cmd, "Data:", data)
 		if funcs[cmd] != nil {
 			answer += funcs[cmd](from, data)
