@@ -9,11 +9,11 @@ import (
 	"fmt"
 	"github.com/thoj/go-ircevent"
 	"io/ioutil"
-	"regexp"
-	"time"
-	"strconv"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type Config struct {
@@ -144,15 +144,15 @@ var funcs = map[string]func(string, string) string{
 			user = nick
 		}
 		if user == nick || isAdmin(nick) {
-    		if _, ok := users[user]; ok {
-	    	    delete(users, user)
-	    	    save()
-	    	    return "Counter for user " + user + " deleted"
-	    	} else {
-	    	    return "Counter not found for user " + user
-	    	}
-    	}
-    	return "You can't delete other people's counters"
+			if _, ok := users[user]; ok {
+				delete(users, user)
+				save()
+				return "Counter for user " + user + " deleted"
+			} else {
+				return "Counter not found for user " + user
+			}
+		}
+		return "You can't delete other people's counters"
 	},
 }
 
