@@ -119,8 +119,10 @@ var funcs = map[string]func(string, string) string{
 	},
 	"get": func(nick, data string) string {
 		user := data
+		start := user + " is winning for "
 		if user == "" {
 			user = nick
+			start = "You're winning for "
 		}
 		if u, ok := users[user]; ok {
 			dur := time.Now().Sub(u.Date)
@@ -131,7 +133,7 @@ var funcs = map[string]func(string, string) string{
 			} else {
 				dstr = " days"
 			}
-			return user + " is winning for " + strconv.Itoa(days) + dstr
+			return start + strconv.Itoa(days) + dstr
 		}
 		return "Counter not found for user " + user
 	},
@@ -180,8 +182,9 @@ func onMessage(bot *irc.Connection, from, to, message string) {
 }
 
 func compileRegex(nick string) {
-	cmdReStr := "(\\w+)(?:\\s(.+))?" //regex for command in private
-	chatCmdReStr := "^" + nick + "[:,]\\s" + cmdReStr
+	baseReStr := "(\\w+)(?:\\s(.+))?"
+	cmdReStr := "(?i)" + baseReStr //regex for command in private
+	chatCmdReStr := "(?i)^" + nick + "[:,]?\\s" + cmdReStr
 	cmdRe, _ = regexp.Compile(cmdReStr)
 	chatCmdRe, _ = regexp.Compile(chatCmdReStr)
 	dateRe, _ = regexp.Compile(`(\d\d\d\d-\d?\d-\d?\d)(?:\s(\w+))?`)
