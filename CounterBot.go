@@ -26,6 +26,7 @@ type Config struct {
 
 type UserData struct {
 	Date time.Time
+	Goal int
 }
 
 var (
@@ -59,7 +60,11 @@ func isAdmin(nick string) bool {
 }
 
 func setDate(user string, date time.Time) {
-	users[user] = UserData{date}
+	goal := 0
+	if u, ok := users[user]; ok {
+		goal = u.Goal
+	}
+	users[user] = UserData{date, goal}
 	save()
 }
 
@@ -77,6 +82,14 @@ func load() {
 	err = json.Unmarshal(b, &users)
 	if err != nil {
 		fmt.Println("Error parsing users file")
+	}
+}
+
+func daystr(days int) string {
+	if days == 1 {
+		return " day"
+	} else {
+		return " days"
 	}
 }
 
@@ -100,7 +113,11 @@ var funcs = map[string]func(string, string) string{
 		}
 		if user == nick || isAdmin(nick) {
 			setDate(user, date)
-			return "Counter of user " + user + " updated"
+			if user == nick {
+				return "Your counter updated"
+			} else {
+				return "Counter of user " + user + " updated"
+			}
 		} else {
 			return "Sorry, you can't change other people's counters"
 		}
@@ -127,13 +144,18 @@ var funcs = map[string]func(string, string) string{
 		if u, ok := users[user]; ok {
 			dur := time.Now().Sub(u.Date)
 			days := int(dur.Hours() / 24)
-			var dstr string
-			if days == 1 {
-				dstr = " day"
-			} else {
-				dstr = " days"
+			dstr := daystr(days)
+			ret := start + strconv.Itoa(days) + dstr
+			if u.Goal > days && u.Goal > 0 {
+				left := u.Goal - days
+				ret = ret + ". You have " + strconv.Itoa(left) + daystr(left) + " to go for your goal."
+			} else if u.Goal == days {
+				ret = ret + ". Congratulations on reaching your goal, feel free to set a new one."
 			}
-			return start + strconv.Itoa(days) + dstr
+			return ret
+		}
+		if user == nick {
+			return "You don't have a counter, use \"set yyyy-mm-dd\" or \"reset\" to get one"
 		}
 		return "Counter not found for user " + user
 	},
@@ -149,12 +171,29 @@ var funcs = map[string]func(string, string) string{
 			if _, ok := users[user]; ok {
 				delete(users, user)
 				save()
-				return "Counter for user " + user + " deleted"
+				if user == nick {
+					return "Your counter deleted"
+				} else {
+					return "Counter of user " + user + " deleted"
+				}
 			} else {
 				return "Counter not found for user " + user
 			}
 		}
 		return "You can't delete other people's counters"
+	},
+	"setgoal": func(nick, data string) string {
+		if u, ok := users[nick]; ok {
+			goal, err := strconv.ParseInt(data, 10, 32)
+			if err != nil {
+				return "Error setting goal, use \"setgoal <number of days>\""
+			}
+			u.Goal = int(goal)
+			users[nick] = u
+			save()
+			return "Your goal has been set"
+		}
+		return "You don't have a counter, use \"set yyyy-mm-dd\" or \"reset\" to get one"
 	},
 }
 
