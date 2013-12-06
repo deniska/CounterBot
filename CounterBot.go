@@ -114,9 +114,9 @@ var funcs = map[string]func(string, string) string{
 		if user == nick || isAdmin(nick) {
 			setDate(user, date)
 			if user == nick {
-				return "Your counter updated"
+				return "Your counter has been updated"
 			} else {
-				return "Counter of user " + user + " updated"
+				return "Counter of user " + user + " has been updated"
 			}
 		} else {
 			return "Sorry, you can't change other people's counters"
@@ -130,7 +130,7 @@ var funcs = map[string]func(string, string) string{
 		now := time.Now()
 		if user == nick || isAdmin(nick) {
 			setDate(user, time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC))
-			return "Counter for user " + user + " updated"
+			return "Counter for user " + user + " has been updated"
 		}
 		return "Sorry, you can't change other people's counters"
 	},
@@ -150,7 +150,7 @@ var funcs = map[string]func(string, string) string{
 				left := u.Goal - days
 				ret = ret + ". You have " + strconv.Itoa(left) + daystr(left) + " to go for your goal."
 			} else if u.Goal == days {
-				ret = ret + ". Congratulations on reaching your goal, feel free to set a new one."
+				ret = ret + ". Congratulations on reaching your goal, feel free to set the new one."
 			}
 			return ret
 		}
@@ -160,7 +160,7 @@ var funcs = map[string]func(string, string) string{
 		return "Counter not found for user " + user
 	},
 	"help": func(nick, data string) string {
-		return "Commands: help, set, get, reset, delete, hello"
+		return "Commands: help, set, get, reset, delete, setgoal, hello"
 	},
 	"delete": func(nick, data string) string {
 		user := data
@@ -172,9 +172,9 @@ var funcs = map[string]func(string, string) string{
 				delete(users, user)
 				save()
 				if user == nick {
-					return "Your counter deleted"
+					return "Your counter has been deleted"
 				} else {
-					return "Counter of user " + user + " deleted"
+					return "Counter of user " + user + " has been deleted"
 				}
 			} else {
 				return "Counter not found for user " + user
