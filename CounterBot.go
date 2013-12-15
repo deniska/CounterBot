@@ -149,7 +149,7 @@ var funcs = map[string]func(string, string) string{
 			if u.Goal > days && u.Goal > 0 {
 				left := u.Goal - days
 				ret = ret + ". You have " + strconv.Itoa(left) + daystr(left) + " to go for your goal."
-			} else if u.Goal == days {
+			} else if u.Goal == days && u.Goal > 0 {
 				ret = ret + ". Congratulations on reaching your goal, feel free to set the new one."
 			}
 			return ret
