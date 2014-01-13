@@ -139,7 +139,7 @@ var funcs = map[string]func(string, string) string{
 		start := user + " is winning for "
 		if user == "" {
 			user = nick
-			start = "You're winning for "
+			start = "You have been winning for "
 		}
 		if u, ok := users[user]; ok {
 			dur := time.Now().Sub(u.Date)
@@ -148,9 +148,9 @@ var funcs = map[string]func(string, string) string{
 			ret := start + strconv.Itoa(days) + dstr
 			if u.Goal > days && u.Goal > 0 {
 				left := u.Goal - days
-				ret = ret + ". You have " + strconv.Itoa(left) + daystr(left) + " to go for your goal."
+				ret = ret + ". You have " + strconv.Itoa(left) + daystr(left) + " to go to reach your goal."
 			} else if u.Goal == days && u.Goal > 0 {
-				ret = ret + ". Congratulations on reaching your goal, feel free to set the new one."
+				ret = ret + ". Congratulations on reaching your goal, feel free to set a new one."
 			}
 			return ret
 		}
